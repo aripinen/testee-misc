@@ -34,7 +34,7 @@
 
     .method dl dt {
         float: left;
-        width: 160px;
+        width: 220px;
         overflow: hidden;
         clear: left;
         text-align: right;
@@ -43,7 +43,19 @@
     }
 
     .method dl dd {
-        margin-left: 180px;
+        margin-left: 230px;
+    }
+
+    .method dl dd dt{
+        width: 100px;
+    }
+
+    .method dl dd dd{
+        margin-left: 110px;
+    }
+
+    .method dl i {
+        color: #3ad900;
     }
 </style>
 
@@ -65,13 +77,13 @@
         <p>Типовой процесс работы системы корпоративного клиента или кадрового агентства (далее Системы) с API выглядит
             так:</p>
         <ol>
-            <li>Система запрашивает перечень доступных заданий</li>
-            <li>Система отправляет конкретному кандидату на e-mail ссылку на прохождение определенного задания</li>
-            <li>Система по запросу пользователя опрашивает Testee текущий статус прохождения задания</li>
+            <li>Система запрашивает перечень доступных заданий.</li>
+            <li>Система отправляет конкретному кандидату на e-mail ссылку на прохождение определенного задания.</li>
+            <li>Система по запросу пользователя опрашивает Testee текущий статус прохождения задания.</li>
             <li>Система получает нотификацию о завершении задания и переходит на следующий этап процесса работы с
-                конкретным кандидатом
+                конкретным кандидатом.
             </li>
-            <li>Система запрашивает Testee полную информацию о результатах прохождения конкретного тестирования</li>
+            <li>Система запрашивает Testee полную информацию о результатах прохождения конкретного тестирования.</li>
         </ol>
 
         <h2>Начало работы</h2>
@@ -84,7 +96,7 @@
             </li>
             <li>Токен, выданный для доступа к Testee (доступен через веб-интерфейс). Токен следует передавать в
                 заголовке Authorization при каждом вызове API Testee, указывая тип токена Token перед его значением.
-                Пример такого заголовка: “Authorization: Token b54a6e22b5eecb28c4328af60e2b4db845820c36”
+                Пример такого заголовка: “Authorization: Token b54a6e22b5eecb28c4328af60e2b4db845820c36”.
             </li>
         </ul>
 
@@ -97,40 +109,139 @@
                 (GET)
             </div>
             <div class="description">
-                Возвращает полную информацию о тестировании. Вызов предполагает что заранее известен идентификатор
-                тестирования.
+                Возвращает список всех заданий.
             </div>
             <div class="parameters">
                 <div class="title">Параметры</div>
-                <dl>
-                    <dt>problemsetInvitation</dt>
-                    <dd>весь объект <code>ProblemsetInvitation</code></dd>
-                    <dt>token</dt>
-                    <dd>(опционально) когда началось тестирование в зоне МСК (если началось), пример <code>startTime="2017-06-09
-                        02:20:11"</code></dd>
-                </dl>
+                <div class="description">Отсутствуют</div>
+            </div>
+            <div class="returns">
+                <div class="title">Возвращает</div>
+                <div class="description">JSON-Array объектов <code>Problemset</code> (см. ниже)</div>
+            </div>
+        </div>
+
+        <div class="method">
+            <div class="url">
+                <code>/Problemset/id</code>
+                (GET)
+            </div>
+            <div class="description">
+                Возвращает одно задание.
+            </div>
+            <div class="parameters">
+                <div class="title">Параметры</div>
+                <div class="description">Отсутствуют</div>
             </div>
             <div class="returns">
                 <div class="title">Возвращает</div>
                 <div class="description">JSON-Object c полями:</div>
                 <dl>
-                    <dt>problemsetInvitation</dt>
-                    <dd>весь объект <code>ProblemsetInvitation</code></dd>
+                    <dt>id</dt>
+                    <dd>внутренний <code>id</code>, например <code>id=291</code></dd>
+                    <dt>localizedName</dt>
+                    <dd>SON-объект с русским и английским названием задания, пример
+                        <code>localizedName={"en":"Testing problemset","ru":"Тестовое задание"}</code></dd>
                     <dt>token</dt>
-                    <dd>(опционально) когда началось тестирование в зоне МСК (если началось), пример <code>startTime="2017-06-09
-                        02:20:11"</code></dd>
+                    <dd><i>(опционально)</i> основная часть секретной ссылки, если задание доступно
+                        по секретной ссылке, полную надо составить так <code>testee.io/test/{token}</code></dd>
+                    <dt>usePhoneConfirmation</dt>
+                    <dd>надо ли просить кандидата подтверждать номер телефона через смс
+                        (будет вынужден ввести его, если не был указан в приглашении)</dd>
+                    <dt>durationMinutes</dt>
+                    <dd>продолжительность в минутах прохождения задания</dd>
+                    <dt>invitationExpireTimeDelayMinutes</dt>
+                    <dd>время действия приглашения в минутах</dd>
+                    <dt>allowedLanguages</dt>
+                    <dd>JSON-массив для допустимых языков условий задач,
+                        <code>пример allowedLanguages=["ru","en"]</code></dd>
+                    <dt>hidden</dt>
+                    <dd>скрыто ли задание, пример <code>hidden=false</code></dd>
+                    <dt>active</dt>
+                    <dd>активно ли задание (можно ли по нему высылать приглашения и проходить его), пример
+                        <code>active=true</code></dd>
+                    <dt>problems</dt>
+                    <dd>список задач в задании, где каждая задача имеет:
+                        <dl>
+                            <dt>id</dt>
+                            <dd>внутренний id задачи</dd>
+                            <dt>localizedName</dt>
+                            <dd>JSON-объект с русским и английским названием задачи, пример
+                                <code>localizedName={"en":"System Administrator","ru":"Системный администратор"}</code></dd>
+                            <dt>score</dt>
+                            <dd>сложность задачи (звёзды), число от 0 до 5</dd>
+                        </dl>
+                    </dd>
                 </dl>
             </div>
         </div>
 
         <div class="method">
             <div class="url">
-                <code>/Problemset2</code>
+                <code>/ProblemsetInvitation</code>
+                (POST)
+            </div>
+            <div class="description">
+                Добавить приглашение к прохождению задания.
+            </div>
+            <div class="parameters">
+                <div class="title">Параметры</div>
+                <dl>
+                    <dt>problemsetId</dt>
+                    <dd><code>id</code> задания</dd>
+                    <dt>firstName</dt>
+                    <dd><i>(опционально)</i> имя кандидата</dd>
+                    <dt>lastName</dt>
+                    <dd><i>(опционально)</i> фамилия кандидата</dd>
+                    <dt>email</dt>
+                    <dd>электронный адрес кандидата</dd>
+                    <dt>phone</dt>
+                    <dd><i>(опционально)</i> телефон в формате +79123456789</dd>
+                    <dt>notificationEmails</dt>
+                    <dd>JSON-массив электронных адресов на которые будут отправлены
+                        отчеты о прохождении кандидатом тестирования</dd>
+                    <dt>letterSubject</dt>
+                    <dd><i>(опционально)</i>  тема письма-приглашения (если нет, то стандартное вида
+                        "Приглашение пройти задание от <code>{Компания}</code> на Testee")</dd>
+                    <dt>letterBody</dt>
+                    <dd><i>(опционально)</i> текст письма-приглашения
+                        (если нет, то стандартный, содержит название компании, лого и короткую</dd>
+                </dl>
+            </div>
+            <div class="returns">
+                <div class="title">Возвращает</div>
+                <div class="description">JSON-Object c полями:</div>
+                <dl>
+                    <dt>id</dt>
+                    <dd>внутренний id, например <code>id=3911</code></dd>
+                    <dt>token</dt>
+                    <dd>основная часть секретной ссылки, полная строится так <code>testee.io/start/{token}</code></dd>
+                </dl>
+            </div>
+        </div>
+
+        <h2>Работа с тестированиями</h2>
+
+        <p>После того как кандидат получил ссылку на тестирование он может приступить к тестированию
+            и выполнить одно или несколько заданий. Чтобы получить полную информацию о тестировании
+            (если известен идентификатор тестирования) используется вызов <code>/Testing/id</code>.
+            Идентификатор тестирования может быть известен если ранее через систему было отправлено
+            приглашение кандидату на прохождение тестирования.
+            В случае если идентификатор тестирования не известен, тестирование можно найти при помощи
+            вызова <code>/Testing?[email=?][phone=?]</code>. Если необходимо подписаться на обратный
+            вызов для получения нотификации об изменении статуса тестирования, необходимо использовать
+            вызов <code>/Testing/id?callbackUrl=...</code>.
+        </p>
+
+        <h3>Тестирования (Testings)</h3>
+
+        <div class="method">
+            <div class="url">
+                <code>/Testing/id</code>
                 (GET)
             </div>
             <div class="description">
-                Возвращает полную информацию о тестировании. Вызов предполагает что заранее известен идентификатор
-                тестирования.
+                Возвращает тестирование по <code>id</code>.
             </div>
             <div class="parameters">
                 <div class="title">Параметры</div>
@@ -143,9 +254,79 @@
                     <dt>problemsetInvitation</dt>
                     <dd>весь объект <code>ProblemsetInvitation</code></dd>
                     <dt>token</dt>
-                    <dd>(опционально) когда началось тестирование в зоне МСК (если началось), пример <code>startTime="2017-06-09
-                        02:20:11"</code></dd>
+                    <dd>основная часть секретной ссылки, полная строится так
+                        <code>testee.io/start/{token}</code></dd>
+                    <dt>startTime</dt>
+                    <dd><i>(опционально)</i> когда началось тестирование в зоне МСК (если началось),пример
+                        <code>startTime="2017-06-09 02:20:11"</code></dd>
+                    <dt>finishTime</dt>
+                    <dd><i>(опционально)</i> когда прервали тестирование
+                        (если оно началось и кандидат его досрочно прервал)</dd>
+                    <dt>completed</dt>
+                    <dd>закончено ли тестирование, пример <code>completed=true</code></dd>
+                    <dt>solvedProblemCount</dt>
+                    <dd>количество решенных задач</dd>
+                    <dt>score</dt>
+                    <dd>суммарная сложность решенных задач</dd>
+                    <dt>problemResults</dt>
+                    <dd>JSON-объект с полями:
+                        <dl>
+                            <dt>problemId</dt>
+                            <dd><code>id</code> задачи</dd>
+                            <dt>submissionCount</dt>
+                            <dd>количество попыток (до первой успешной включительно)</dd>
+                            <dt>solved</dt>
+                            <dd>решена ли задача</dd>
+                            <dt>passedTestCount</dt>
+                            <dd>лучшее количество пройденных тестов</dd>
+                            <dt>sourceCodes</dt>
+                            <dd>массив исходных кодов решений</dd>
+                        </dl>
+                    </dd>
+                    <dt>url</dt>
+                    <dd>ссылка на детальный отчет на сайте Testee</dd>
                 </dl>
+            </div>
+        </div>
+
+        <div class="method">
+            <div class="url">
+                <code>/Testing?[email=?][phone=?]</code>
+                (GET)
+            </div>
+            <div class="description">
+                Возвращает список объектов <code>Testing</code> отфильтрованные по email/phone кандидата.
+            </div>
+            <div class="parameters">
+                <div class="title">Параметры</div>
+                <dl>
+                    <dt>email/phone</dt>
+                    <dd>либо email, либо phone кандидата</dd>
+                </dl>
+            </div>
+            <div class="returns">
+                <div class="title">Возвращает</div>
+                <div class="description">JSON-Array объектов <code>Testing</code> (см. выше)</div>
+            </div>
+        </div>
+
+        <div class="method">
+            <div class="url">
+                <code>/Testing/id?callbackUrl=...</code>
+                (POST)
+            </div>
+            <div class="description">
+                Подписаться на окончание тестирования, на заданный callbackUrl будет отправлен HTTP-POST с телом,
+                содержащим <code>Testing</code>. Ожидается 200, если не 200, то отправляется повторно пока не будет 200
+                или не пройдетнеделя с момента окончания тестирования.
+            </div>
+            <div class="parameters">
+                <div class="title">Параметры</div>
+                <div class="description">Отсутствуют</div>
+            </div>
+            <div class="returns">
+                <div class="title">Возвращает</div>
+                <div class="description">Текущее состояние <code>Testing</code> (см. выше)</div>
             </div>
         </div>
     </div>
