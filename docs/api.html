@@ -1,0 +1,152 @@
+<style>
+    .method {
+        margin-bottom: 30px;
+    }
+
+    .method .url, .method .url code {
+        font-size: 20px;
+    }
+
+    .method > .description {
+        margin-top: 3px;
+    }
+
+    .method .title {
+        font-weight: bold;
+        margin-top: 1em;
+    }
+
+    .method dl {
+        margin-top: 3px;
+        *zoom: 1;
+    }
+
+    .method dl:before,
+    .method dl:after {
+        display: table;
+        line-height: 0;
+        content: "";
+    }
+
+    .method dl:after {
+        clear: both;
+    }
+
+    .method dl dt {
+        float: left;
+        width: 160px;
+        overflow: hidden;
+        clear: left;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .method dl dd {
+        margin-left: 180px;
+    }
+</style>
+
+<div class="row">
+    <div class="offset1 span10">
+        <h2>Описание</h2>
+        <p>
+            Testee API предназначен для удобной интеграции тестирования кандидатов в общий процесс найма сотрудников для
+            корпоративных клиентов и кадровых агентств.
+        </p>
+        <p>
+            Через API предоставляется возможность получать списки заданий, приглашать кандидатов к прохождений
+            тестирования, искать кандидатов решивших общедоступные задания, отслеживать результаты прохождения
+            тестирования и получать нотификации о завершении тестирования.
+            В данной версии API не предоставляется возможность зарегистрировать компанию или новых менеджеров, изменять
+            информацию о компании, изменять задачи и/или наборы задач. Эти операции должны выполняться через
+            пользовательский интерфейс Testee.
+        </p>
+        <p>Типовой процесс работы системы корпоративного клиента или кадрового агентства (далее Системы) с API выглядит
+            так:</p>
+        <ol>
+            <li>Система запрашивает перечень доступных заданий</li>
+            <li>Система отправляет конкретному кандидату на e-mail ссылку на прохождение определенного задания</li>
+            <li>Система по запросу пользователя опрашивает Testee текущий статус прохождения задания</li>
+            <li>Система получает нотификацию о завершении задания и переходит на следующий этап процесса работы с
+                конкретным кандидатом
+            </li>
+            <li>Система запрашивает Testee полную информацию о результатах прохождения конкретного тестирования</li>
+        </ol>
+
+        <h2>Начало работы</h2>
+
+        <p>API будет доступен как REST по url вида <a href="https://testee.io/api/v0/">https://testee.io/api/v0/</a></p>
+        Ожидаются:
+        <ul>
+            <li>Корректные заголовки Accept и Content-Type: API Testee поддерживает только один MIME-тип,
+                application/json. Любое другое значение приведет к ошибке формата данных.
+            </li>
+            <li>Токен, выданный для доступа к Testee (доступен через веб-интерфейс). Токен следует передавать в
+                заголовке Authorization при каждом вызове API Testee, указывая тип токена Token перед его значением.
+                Пример такого заголовка: “Authorization: Token b54a6e22b5eecb28c4328af60e2b4db845820c36”
+            </li>
+        </ul>
+
+        <h2>Работа с заданиями</h2>
+        <h3>Задания (Problemsets)</h3>
+
+        <div class="method">
+            <div class="url">
+                <code>/Problemset</code>
+                (GET)
+            </div>
+            <div class="description">
+                Возвращает полную информацию о тестировании. Вызов предполагает что заранее известен идентификатор
+                тестирования.
+            </div>
+            <div class="parameters">
+                <div class="title">Параметры</div>
+                <dl>
+                    <dt>problemsetInvitation</dt>
+                    <dd>весь объект <code>ProblemsetInvitation</code></dd>
+                    <dt>token</dt>
+                    <dd>(опционально) когда началось тестирование в зоне МСК (если началось), пример <code>startTime="2017-06-09
+                        02:20:11"</code></dd>
+                </dl>
+            </div>
+            <div class="returns">
+                <div class="title">Возвращает</div>
+                <div class="description">JSON-Object c полями:</div>
+                <dl>
+                    <dt>problemsetInvitation</dt>
+                    <dd>весь объект <code>ProblemsetInvitation</code></dd>
+                    <dt>token</dt>
+                    <dd>(опционально) когда началось тестирование в зоне МСК (если началось), пример <code>startTime="2017-06-09
+                        02:20:11"</code></dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="method">
+            <div class="url">
+                <code>/Problemset</code>
+                (GET)
+            </div>
+            <div class="description">
+                Возвращает полную информацию о тестировании. Вызов предполагает что заранее известен идентификатор
+                тестирования.
+            </div>
+            <div class="parameters">
+                <div class="title">Параметры</div>
+                <div class="description">Отсутствуют</div>
+            </div>
+            <div class="returns">
+                <div class="title">Возвращает</div>
+                <div class="description">JSON-Object c полями:</div>
+                <dl>
+                    <dt>problemsetInvitation</dt>
+                    <dd>весь объект <code>ProblemsetInvitation</code></dd>
+                    <dt>token</dt>
+                    <dd>(опционально) когда началось тестирование в зоне МСК (если началось), пример <code>startTime="2017-06-09
+                        02:20:11"</code></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
